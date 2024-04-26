@@ -26,6 +26,9 @@ import dev.gitlive.firebase.FirebaseOptions
 import dev.gitlive.firebase.auth.AuthResult
 import dev.gitlive.firebase.auth.auth
 import dev.gitlive.firebase.initialize
+import io.ktor.client.call.*
+import io.ktor.client.statement.*
+import io.ktor.http.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -39,18 +42,6 @@ import java.awt.Dimension
 @Composable
 @Preview
 fun App() {
-
-    val signInState = remember { mutableStateOf(false) }
-
-    LaunchedEffect(key1 = true) {
-        withContext(Dispatchers.Main) {
-            // Your coroutine that interacts with the UI
-        //val user = Firebase.auth.signInWithEmailAndPassword("jeetinn@gmail.com", "123456")
-            val token = signInWithEmailAndPassword("jeetinn@gmail.com", "123456")
-            println(token ?: "Nahi aya")
-        }
-    }
-
     MyAppTheme {
         Navigator(screen = SplashScreen())
     }
@@ -58,7 +49,7 @@ fun App() {
 }
 
 fun main() = application {
-    initializeFirebase()
+    //initializeFirebase()
     Window(
         onCloseRequest = ::exitApplication,
         icon = painterResource("drawable/googlelogo.png"),
@@ -71,7 +62,7 @@ fun main() = application {
 
 }
 
-fun initializeFirebase() {
+/*fun initializeFirebase() {
     FirebasePlatform.initializeFirebasePlatform(
         object : FirebasePlatform() {
             val storage = mutableMapOf<String, String>()
@@ -90,5 +81,5 @@ fun initializeFirebase() {
         projectId = "universaltestingmachine-4589e",
     )
 
-  val app =  Firebase.initialize(Application(), options)
-}
+    Firebase.initialize(Application(), options)
+}*/

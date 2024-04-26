@@ -14,11 +14,11 @@ object FirebaseApp {
     lateinit var app : FirebaseApp
 
     @OptIn(InternalAPI::class)
-    suspend fun signInWithEmailAndPassword(email: String, password: String): String? {
+    suspend fun signInWithEmailAndPassword(email: String, password: String): HttpResponse? {
         return KtorClient.client.post("https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBJZ_zXdVg8lAv76SQxYr2NPH82MSaNLBU") {
             setBody(FirebaseSignInRequest(email, password, false))
             contentType(ContentType.Application.Json)
-        }.body()
+        }
 
        // return response.toString()
     }
