@@ -284,9 +284,27 @@ class LoginScreen: Screen {
                 )
                 Button( enabled = !loading
                     ,onClick = {
+                        if(email.isBlank() && password.isBlank()){
+                            snackbarCoroutineScope.launch {
+                                snackbarHostState.showSnackbar("Error: Email and Password fields are blank!")
+                            }
+                            return@Button
+                        }else{
+                            if(email.isBlank()){
+                                snackbarCoroutineScope.launch {
+                                    snackbarHostState.showSnackbar("Error: Email field is blank!")
+                                }
+                                return@Button
+                            }else if(password.isBlank()){
+                                snackbarCoroutineScope.launch {
+                                    snackbarHostState.showSnackbar("Error: Password field is blank!")
+                                }
+                                return@Button
+                            }
+                        }
                         loading = true
                         coroutineScope.launch {
-                            val token = FirebaseApp.signInWithEmailAndPassword("jeetin@gmail.com", "123456")?.let {
+                            val token = FirebaseApp.signInWithEmailAndPassword(email, password)?.let {
                                 if(it.status == HttpStatusCode.OK){
                                     println(it.body() as String)
                                     btnClick = true

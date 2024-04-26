@@ -5,6 +5,7 @@ plugins {
     kotlin("jvm")
     id("org.jetbrains.compose")
     kotlin("plugin.serialization") version "1.8.20"
+    id("app.cash.sqldelight") version "2.0.0-alpha05"
 }
 
 group = "com.utm.application"
@@ -43,6 +44,9 @@ dependencies {
     implementation ("io.ktor:ktor-client-logging:2.3.2")
     implementation("org.slf4j:slf4j-simple:2.0.9")
 
+    //SQL delight
+    //implementation("com.squareup.sqldelight:sqlite-driver:1.5.3")
+
     /*implementation("io.ktor:ktor-client-core:1.5.4")
     implementation("io.ktor:ktor-client-cio:1.5.4")
 
@@ -54,6 +58,14 @@ dependencies {
 
 
 
+}
+
+sqldelight {
+    databases {
+        create("UniversalTestingMachine") {
+            packageName.set("com.utm.application")
+        }
+    }
 }
 
 compose.desktop {
