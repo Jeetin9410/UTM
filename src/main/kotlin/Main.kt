@@ -9,6 +9,9 @@ import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import cafe.adriel.voyager.navigator.Navigator
 import com.myapp.ui.value.MyAppTheme
+import database.*
+import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.transactions.transaction
 import ui.splash.SplashScreen
 import java.awt.Dimension
 
@@ -16,6 +19,15 @@ import java.awt.Dimension
 @Composable
 @Preview
 fun App() {
+    LaunchedEffect(true) {
+        transaction{
+            SchemaUtils.create(Users)
+        }
+        //addUser("jeetin11","Nicky11")
+        val list : List<User> = getAllUsers()
+
+        println(list.toString())
+    }
     MyAppTheme {
         Navigator(screen = SplashScreen())
     }
@@ -23,7 +35,7 @@ fun App() {
 }
 
 fun main() = application {
-    //initializeFirebase()
+    DatabaseFactory.init()
     Window(
         onCloseRequest = ::exitApplication,
         icon = painterResource("drawable/googlelogo.png"),
