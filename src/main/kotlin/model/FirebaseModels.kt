@@ -26,3 +26,16 @@ data class ErrorX(
     val message: String,
     val reason: String
 )
+
+
+/*Firebase Success login response */
+@Serializable
+data class FirebaseLoginSuccessResp(
+    val displayName: String,
+    val email: String,
+    val idToken: String,
+    val kind: String,
+    val localId: String,
+    val profilePicture: String,
+    val registered: Boolean
+)

@@ -38,6 +38,7 @@ import io.ktor.client.call.*
 import io.ktor.http.*
 import kotlinx.coroutines.*
 import model.FirebaseLoginErrorResp
+import model.FirebaseLoginSuccessResp
 import org.jetbrains.annotations.Async
 import utils.FirebaseApp
 import utils.Status
@@ -304,12 +305,16 @@ class LoginScreen: Screen {
                         }
                         loading = true
                         coroutineScope.launch {
-                            val token = FirebaseApp.signInWithEmailAndPassword(email, password)?.let {
+                            FirebaseApp.signInWithEmailAndPassword(email, password)?.let {
                                 if(it.status == HttpStatusCode.OK){
+                                    val success: FirebaseLoginSuccessResp = Gson().fromJson(it.body() as String, FirebaseLoginSuccessResp::class.java)
                                     println(it.body() as String)
                                     btnClick = true
                                     snackbarCoroutineScope.launch {
                                         snackbarHostState.showSnackbar("Success: Login Successful!")
+                                    }
+                                    snackbarCoroutineScope.launch {
+                                        snackbarHostState.showSnackbar("Success: Welcome ${success.displayName}!")
                                     }
                                 }else{
                                     println(it.body() as String)
