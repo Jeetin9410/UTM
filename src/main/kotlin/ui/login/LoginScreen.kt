@@ -34,20 +34,22 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.google.gson.Gson
 import com.myapp.ui.value.R
+import database.*
 import io.ktor.client.call.*
 import io.ktor.http.*
 import kotlinx.coroutines.*
 import model.FirebaseLoginErrorResp
 import model.FirebaseLoginSuccessResp
 import org.jetbrains.annotations.Async
+import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.transactions.transaction
 import utils.FirebaseApp
 import utils.Status
 
-class LoginScreen: Screen {
+class LoginScreen(private val snackbarCoroutineScope : CoroutineScope,private val snackbarHostState: SnackbarHostState): Screen {
 
     @Composable
     override fun Content() {
-
         loginScreen()
     }
 
@@ -55,10 +57,6 @@ class LoginScreen: Screen {
     @Composable
     fun loginScreen(){
         val navigator = LocalNavigator.currentOrThrow
-        val scaffoldState = rememberScaffoldState()
-        val snackbarCoroutineScope = rememberCoroutineScope()
-        val snackbarHostState = remember { SnackbarHostState() }
-        Scaffold(scaffoldState = scaffoldState,snackbarHost = { CustomSnackbarHost(snackbarHostState) },) {
             Row(modifier = Modifier.fillMaxSize()) {
                 // Left panel
                 Box(
@@ -167,6 +165,7 @@ class LoginScreen: Screen {
                                 Font("fonts/GoogleSans-Medium.ttf")
                             )
                         ))
+                        Spacer(modifier = Modifier.height(10.dp))
                         Text("Universal Testing Machine",style = TextStyle(
                             color = Color.Black,
                             fontSize = 24.0.sp,
@@ -175,18 +174,14 @@ class LoginScreen: Screen {
                             ),
                             fontWeight = FontWeight.Bold
                         ))
-                        LoginCard(snackbarCoroutineScope,scaffoldState,snackbarHostState)
+                        LoginCard(snackbarCoroutineScope,snackbarHostState)
                     }
                 }
             }
-        }
-
-
-
     }
 
     @Composable
-    fun LoginCard(snackbarCoroutineScope : CoroutineScope, scaffoldState : ScaffoldState, snackbarHostState: SnackbarHostState  ) {
+    fun LoginCard(snackbarCoroutineScope : CoroutineScope, snackbarHostState: SnackbarHostState  ) {
         var email by remember { mutableStateOf("") }
         var password by remember { mutableStateOf("") }
         var passwordVisibility by remember { mutableStateOf(false) }
@@ -309,7 +304,7 @@ class LoginScreen: Screen {
                                 if(it.status == HttpStatusCode.OK){
                                     val success: FirebaseLoginSuccessResp = Gson().fromJson(it.body() as String, FirebaseLoginSuccessResp::class.java)
                                     println(it.body() as String)
-                                    btnClick = true
+                                    saveUserDetails(success)
                                     snackbarCoroutineScope.launch {
                                         snackbarHostState.showSnackbar("Success: Login Successful!")
                                     }
@@ -379,4 +374,16 @@ class LoginScreen: Screen {
             }
         }
     }
+
+    fun saveUserDetails(response :FirebaseLoginSuccessResp){
+        transaction{
+            SchemaUtils.create(Users)
+        }
+        with(getAllUsers()){
+            if(size > 0)
+                deleteAllUsers()
+        }
+        addUser(response.displayName,response.email,response.idToken,response.profilePicture)
+    }
+
 }
