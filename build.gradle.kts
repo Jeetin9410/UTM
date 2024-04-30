@@ -1,8 +1,9 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.dsl.KotlinCompile
+import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType
 
 plugins {
-    kotlin("jvm")
+    kotlin("jvm") version "1.8.20"
     id("org.jetbrains.compose")
     kotlin("plugin.serialization") version "1.8.20"
    // id("app.cash.sqldelight") version "2.0.0-alpha05"
@@ -66,6 +67,9 @@ dependencies {
 
 }
 
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>() {
+    kotlinOptions.jvmTarget = "17"
+}
 
 compose.desktop {
     application {
@@ -75,6 +79,7 @@ compose.desktop {
             targetFormats(TargetFormat.Exe , TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "UTM"
             packageVersion = "1.0.0"
+
             windows {
                 packageVersion = "1.0.0"
                 msiPackageVersion = "1.0.0"

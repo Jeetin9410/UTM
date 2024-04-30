@@ -45,7 +45,7 @@ class SplashScreen(private val snackbarCoroutineScope : CoroutineScope,private v
         }.apply {
             LaunchedEffect(true) {
                 with(getAllUsers()){
-                    if(size > 0){
+                    if(size > 0 && !this[0].token.isNullOrBlank()){
                         delay(1500)
                         navigator.push(LoginScreen(snackbarCoroutineScope,snackbarHostState))
                     }else{
