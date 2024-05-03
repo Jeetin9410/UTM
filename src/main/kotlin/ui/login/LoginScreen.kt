@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.google.gson.Gson
 import com.myapp.ui.value.R
@@ -43,6 +44,7 @@ import model.FirebaseLoginSuccessResp
 import org.jetbrains.annotations.Async
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
+import ui.dashboard.DashboardScreen
 import utils.FirebaseApp
 import utils.Status
 
@@ -174,14 +176,14 @@ class LoginScreen(private val snackbarCoroutineScope : CoroutineScope,private va
                             ),
                             fontWeight = FontWeight.Bold
                         ))
-                        LoginCard(snackbarCoroutineScope,snackbarHostState)
+                        LoginCard(snackbarCoroutineScope,snackbarHostState,navigator)
                     }
                 }
             }
     }
 
     @Composable
-    fun LoginCard(snackbarCoroutineScope : CoroutineScope, snackbarHostState: SnackbarHostState  ) {
+    fun LoginCard(snackbarCoroutineScope : CoroutineScope, snackbarHostState: SnackbarHostState , navigator : Navigator ) {
         var email by remember { mutableStateOf("") }
         var password by remember { mutableStateOf("") }
         var passwordVisibility by remember { mutableStateOf(false) }
@@ -311,6 +313,7 @@ class LoginScreen(private val snackbarCoroutineScope : CoroutineScope,private va
                                     snackbarCoroutineScope.launch {
                                         snackbarHostState.showSnackbar("Success: Welcome ${success.displayName}!")
                                     }
+                                    navigator.push(DashboardScreen(snackbarCoroutineScope,snackbarHostState))
                                 }else{
                                     println(it.body() as String)
                                    val error: FirebaseLoginErrorResp =  Gson().fromJson(it.body() as String, FirebaseLoginErrorResp::class.java)

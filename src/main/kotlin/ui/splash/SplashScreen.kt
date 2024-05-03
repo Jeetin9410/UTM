@@ -47,7 +47,7 @@ class SplashScreen(private val snackbarCoroutineScope : CoroutineScope,private v
                 with(getAllUsers()){
                     if(size > 0 && !this[0].token.isNullOrBlank()){
                         delay(1500)
-                        navigator.push(LoginScreen(snackbarCoroutineScope,snackbarHostState))
+                        navigator.push(DashboardScreen(snackbarCoroutineScope,snackbarHostState))
                     }else{
                         delay(1500)
                         navigator.push(LoginScreen(snackbarCoroutineScope, snackbarHostState))
