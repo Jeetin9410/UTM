@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -114,7 +116,7 @@ class DashboardScreen(private val snackbarCoroutineScope : CoroutineScope, priva
             },
             navigationIcon = {
                 IconButton(onClick = onHamburgerClick) {
-                    Icon(Icons.Default.Share, contentDescription = "Toggle Sidebar")
+                    Icon(Icons.Default.Menu, contentDescription = "Toggle Sidebar")
                 }
             },
             actions = {
@@ -122,7 +124,7 @@ class DashboardScreen(private val snackbarCoroutineScope : CoroutineScope, priva
                 IconButton(onClick = { snackbarCoroutineScope.launch {
                     snackbarHostState.showSnackbar("Success: Login Successful!")
                 } }) {
-                    Image(painter = profilePainter, contentDescription = "Profile")
+                    Icon(Icons.Default.AccountCircle, contentDescription = "Toggle Sidebar")
                 }
             },
             backgroundColor = R.color.Elephant,
