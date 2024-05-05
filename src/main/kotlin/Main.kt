@@ -19,6 +19,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Window
+import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import cafe.adriel.voyager.navigator.Navigator
@@ -36,14 +37,6 @@ import java.awt.Dimension
 @Composable
 @Preview
 fun App() {
-    /*LaunchedEffect(true) {
-        transaction{
-            SchemaUtils.create(Users)
-        }
-        val list : List<User> = getAllUsers()
-
-        println(list.toString())
-    }*/
     MyAppTheme {
         val scaffoldState = rememberScaffoldState()
         val snackbarCoroutineScope = rememberCoroutineScope()
@@ -101,7 +94,7 @@ fun main() = application {
         onCloseRequest = ::exitApplication,
         icon = painterResource("drawable/googlelogo.png"),
         title = "Universal Testing Machine",
-        state = rememberWindowState(width = 1024.dp, height = 600.dp),
+        state = rememberWindowState(placement = WindowPlacement.Maximized),
     ) {
         window.minimumSize = Dimension(1024, 600)
         App()
