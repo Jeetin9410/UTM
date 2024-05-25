@@ -45,6 +45,7 @@ import org.jetbrains.annotations.Async
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
 import ui.dashboard.DashboardScreen
+import utils.DateTimeUtils
 import utils.FirebaseApp
 import utils.Status
 
@@ -306,7 +307,7 @@ class LoginScreen(private val snackbarCoroutineScope : CoroutineScope,private va
                                 if(it.status == HttpStatusCode.OK){
                                     val success: FirebaseLoginSuccessResp = Gson().fromJson(it.body() as String, FirebaseLoginSuccessResp::class.java)
                                     println(it.body() as String)
-                                    saveUserDetails(success)
+                                    saveUserDetails(success, DateTimeUtils.epochTime())
                                     snackbarCoroutineScope.launch {
                                         snackbarHostState.showSnackbar("Success: Login Successful!")
                                     }
@@ -378,7 +379,7 @@ class LoginScreen(private val snackbarCoroutineScope : CoroutineScope,private va
         }
     }
 
-    fun saveUserDetails(response :FirebaseLoginSuccessResp){
+    fun saveUserDetails(response :FirebaseLoginSuccessResp, loginTime : Long){
         transaction{
             SchemaUtils.create(Users)
         }
@@ -386,7 +387,7 @@ class LoginScreen(private val snackbarCoroutineScope : CoroutineScope,private va
             if(size > 0)
                 deleteAllUsers()
         }
-        addUser(response.displayName,response.email,response.idToken,response.profilePicture)
+        addUser(response.displayName,response.email,response.idToken,response.profilePicture, loginTime)
     }
 
 }

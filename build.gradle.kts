@@ -45,9 +45,10 @@ dependencies {
     implementation ("io.ktor:ktor-client-logging:2.3.2")
     implementation("org.slf4j:slf4j-simple:2.0.9")
 
-    implementation("org.jetbrains.exposed:exposed-core:0.40.1")
-    implementation("org.jetbrains.exposed:exposed-dao:0.40.1")
-    implementation("org.jetbrains.exposed:exposed-jdbc:0.40.1")
+    implementation("org.jetbrains.exposed:exposed-core:0.41.1")
+    implementation("org.jetbrains.exposed:exposed-dao:0.41.1")
+    implementation("org.jetbrains.exposed:exposed-jdbc:0.41.1")
+    implementation ("org.jetbrains.exposed:exposed-java-time:0.41.1")
     implementation("org.xerial:sqlite-jdbc:3.45.3.0")
 
     //SQL delight

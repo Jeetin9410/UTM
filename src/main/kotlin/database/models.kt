@@ -9,6 +9,7 @@ object Users : Table() {
     val email = varchar("email", 100)
     val token = varchar("token",1000)
     val profilePic = varchar("profilePic",1000)
+    val lastLoginTime = long("lastLoginTime").default(0)  //epoch time
 
     override val primaryKey = PrimaryKey(id)
 }

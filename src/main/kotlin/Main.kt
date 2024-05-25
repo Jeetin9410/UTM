@@ -37,6 +37,7 @@ import java.awt.Dimension
 @Composable
 @Preview
 fun App() {
+    //refreshFirebaseToken()
     MyAppTheme {
         val scaffoldState = rememberScaffoldState()
         val snackbarCoroutineScope = rememberCoroutineScope()
