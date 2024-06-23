@@ -1,5 +1,6 @@
 package database
 
+import android.util.Log
 import org.jetbrains.exposed.exceptions.ExposedSQLException
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.deleteAll
@@ -32,7 +33,7 @@ fun getAllUsers(): List<User> {
                         name = it[Users.name],
                         email = it[Users.email],
                         token = it[Users.token],
-                        profilePic = it[Users.profilePic],
+                        profilePic = it[Users.profilePic] ?: "",
                         loginTime = it[Users.lastLoginTime]
                     )
                 }

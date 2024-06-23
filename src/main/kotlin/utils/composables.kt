@@ -18,12 +18,25 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.window.Dialog
 import com.myapp.ui.value.R
 import model.*
-
+import java.io.ByteArrayOutputStream
+import java.net.HttpURLConnection
+import java.net.URL
+import javax.imageio.ImageIO
+import androidx.compose.ui.graphics.asImageBitmap
+import io.ktor.client.*
+import io.ktor.client.call.*
+import io.ktor.client.engine.cio.*
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import org.jetbrains.skia.Image
 
 @Composable
 fun IconAndTextView(
@@ -67,25 +80,19 @@ fun IconAndTextView(
             )
         )
     }
+}
 
+fun loadNetworkImage(link: String): ImageBitmap {
+    val url = URL(link)
+    val connection = url.openConnection() as HttpURLConnection
+    connection.connect()
 
-    @Composable
-    fun showDialog(onDismiss: () -> Unit) {
-        Dialog(onCloseRequest = onDismiss, undecorated = true) {
-            // Dialog content
-            Card(elevation = 8.dp) {
-                Column(
-                    modifier = Modifier.fillMaxWidth().fillMaxHeight(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Text("This is a dialog", style = MaterialTheme.typography.h5)
-                    Spacer(modifier = Modifier.height(20.dp))
-                    Button(onClick = onDismiss) {
-                        Text("Close")
-                    }
-                }
-            }
-        }
-    }
+    val inputStream = connection.inputStream
+    val bufferedImage = ImageIO.read(inputStream)
+
+    val stream = ByteArrayOutputStream()
+    ImageIO.write(bufferedImage, "png", stream)
+    val byteArray = stream.toByteArray()
+
+    return Image.makeFromEncoded(byteArray).asImageBitmap()
 }

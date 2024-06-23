@@ -45,6 +45,7 @@ import org.jetbrains.annotations.Async
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
 import ui.dashboard.DashboardScreen
+import utils.Constants
 import utils.DateTimeUtils
 import utils.FirebaseApp
 import utils.Status
@@ -387,7 +388,7 @@ class LoginScreen(private val snackbarCoroutineScope : CoroutineScope,private va
             if(size > 0)
                 deleteAllUsers()
         }
-        addUser(response.displayName,response.email,response.idToken,response.profilePicture, loginTime)
+        addUser(response.displayName,response.email,response.idToken,Constants.profileUrl, loginTime)
     }
 
 }

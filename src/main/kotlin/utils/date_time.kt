@@ -5,10 +5,7 @@ import android.os.Build
 import java.text.DateFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.LocalTime
-import java.time.ZonedDateTime
+import java.time.*
 import java.time.format.DateTimeFormatter
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -296,5 +293,11 @@ object DateTimeUtils {
         val millisecondsIn24Hours = 24 * 60 * 60 * 1000 // 24 hours in milliseconds
         val difference = Math.abs(epochTime1 - epochTime2)
         return difference >= millisecondsIn24Hours
+    }
+
+    fun epochToDate(epoch: Long, pattern: String = FORMAT_DD_MMM_YYYY): String {
+        val instant = Instant.ofEpochSecond(epoch)
+        val formatter = DateTimeFormatter.ofPattern(pattern).withZone(ZoneId.systemDefault())
+        return formatter.format(instant)
     }
 }

@@ -25,13 +25,16 @@ import kotlinx.coroutines.runBlocking
 import ui.dashboard.DashboardScreen
 import ui.login.LoginScreen
 
-class SplashScreen(private val snackbarCoroutineScope : CoroutineScope,private val snackbarHostState: SnackbarHostState) : Screen {
+class SplashScreen(
+    private val snackbarCoroutineScope: CoroutineScope,
+    private val snackbarHostState: SnackbarHostState
+) : Screen {
 
 
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        Column  (
+        Column(
             modifier = Modifier.fillMaxSize().background(R.color.BigStone),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
@@ -44,11 +47,11 @@ class SplashScreen(private val snackbarCoroutineScope : CoroutineScope,private v
             CircularProgressIndicator(color = Color.White)
         }.apply {
             LaunchedEffect(true) {
-                with(getAllUsers()){
-                    if(size > 0 && !this[0].token.isNullOrBlank()){
+                with(getAllUsers()) {
+                    if (size > 0 && !this[0].token.isNullOrBlank()) {
                         delay(1500)
-                        navigator.push(DashboardScreen(snackbarCoroutineScope,snackbarHostState))
-                    }else{
+                        navigator.push(DashboardScreen(snackbarCoroutineScope, snackbarHostState))
+                    } else {
                         delay(1500)
                         navigator.push(LoginScreen(snackbarCoroutineScope, snackbarHostState))
                     }

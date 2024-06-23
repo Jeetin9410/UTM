@@ -17,8 +17,10 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.loadImageBitmap
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -31,14 +33,19 @@ import androidx.compose.ui.window.rememberWindowState
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabNavigator
+import com.google.firebase.auth.UserInfo
 import com.myapp.ui.value.R
+import database.User
+import database.getAllUsers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import ui.dashboard.tabs.HomeTab
 import ui.dashboard.tabs.ProfileTab
 import ui.dashboard.tabs.TestTab
+import utils.DateTimeUtils
 import utils.FirebaseApp
 import utils.IconAndTextView
+import utils.loadNetworkImage
 
 class DashboardScreen(private val snackbarCoroutineScope : CoroutineScope, private val snackbarHostState: SnackbarHostState) : Screen {
     @Composable
@@ -129,7 +136,7 @@ class DashboardScreen(private val snackbarCoroutineScope : CoroutineScope, priva
     fun TopBar(onHamburgerClick: () -> Unit) {
         var isWindowOpen by remember { mutableStateOf(false) }
         if (isWindowOpen) {
-            ExampleDialog({isWindowOpen = false})
+            ProfileDialog({isWindowOpen = false}, getAllUsers().get(0))
         }
         TopAppBar(
             title = {
@@ -186,7 +193,7 @@ class DashboardScreen(private val snackbarCoroutineScope : CoroutineScope, priva
         )
     }
     @Composable
-    fun ExampleDialog(onDismiss: () -> Unit) {
+    fun ProfileDialog(onDismiss: () -> Unit, userInfo: User) {
         Dialog(onCloseRequest = onDismiss, undecorated = true) {
             // Dialog content
             Card(elevation = 8.dp) {
@@ -195,10 +202,23 @@ class DashboardScreen(private val snackbarCoroutineScope : CoroutineScope, priva
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
-                    Text("This is a dialog", style = MaterialTheme.typography.h5)
-                    Spacer(modifier = Modifier.height(20.dp))
+                    Image(
+                        bitmap = loadNetworkImage("https://static.vecteezy.com/system/resources/previews/027/312/306/non_2x/portrait-of-a-dj-with-headphone-isolated-essential-workers-avatar-icons-characters-for-social-media-and-networking-user-profile-website-and-app-3d-render-illustration-png.png"),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(100.dp)
+                            .clip(CircleShape)
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(text = userInfo.name, style = MaterialTheme.typography.h6)
+                    Text(text = "@${userInfo.name}", style = MaterialTheme.typography.body2)
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(text = "Email: ${userInfo.email}", style = MaterialTheme.typography.body2)
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(text = "Last login at : ${DateTimeUtils.epochToDate(userInfo.loginTime)}", style = MaterialTheme.typography.body2)
+                    Spacer(modifier = Modifier.height(16.dp))
                     Button(onClick = onDismiss) {
-                        Text("Close")
+                        Text(text = "Close")
                     }
                 }
             }
